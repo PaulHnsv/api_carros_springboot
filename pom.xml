@@ -38,6 +38,7 @@
    			<artifactId>lombok</artifactId>
    			<scope>provided</scope>
 		</dependency>
+    
 		<!-- JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
