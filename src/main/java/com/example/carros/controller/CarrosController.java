@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.carros.model.Carro;
 import com.example.carros.service.CarroService;
+import com.examples.carros.dto.CarroDTO;
 import com.google.gson.*;
 
 @RestController
@@ -30,14 +31,16 @@ public class CarrosController {
 	private CarroService carroService;
 	
 	@GetMapping
-	public ResponseEntity<Iterable<Carro>> getCarros() {
+	public ResponseEntity getCarros() {
+		
 		return ResponseEntity.ok(carroService.getCarros());
+		
 		//return new ResponseEntity<>(carroService.getCarros(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Carro>> getCarrosById(@PathVariable("id") long id) {
-		Optional<Carro> carro = carroService.getCarrosById(id);		
+	public ResponseEntity getCarrosById(@PathVariable("id") long id) {
+		Optional<CarroDTO> carro = carroService.getCarrosById(id);		
 		
 		if(carro.isPresent()) {
 			return ResponseEntity.ok(carro);
@@ -47,8 +50,8 @@ public class CarrosController {
 	}
 	
 	@GetMapping("/tipo/{tipo}")
-	public ResponseEntity<List<Carro>> getCarrosByTipo(@PathVariable("tipo") String tipo) {
-		List<Carro> carro = carroService.getCarrosByTipo(tipo);
+	public ResponseEntity getCarrosByTipo(@PathVariable("tipo") String tipo) {
+		List<CarroDTO> carro = carroService.getCarrosByTipo(tipo);
 		
 		//if ternário do java
 		return carro.isEmpty() ?
@@ -74,7 +77,7 @@ public class CarrosController {
 		 Gson gson = new Gson();
 		 
 		try{
-			Carro c = carroService.updateCarro(carro, id);
+			CarroDTO c = carroService.updateCarro(carro, id);
 			String jsonInString = gson.toJson(c);
 			return ResponseEntity.ok().body(jsonInString);
 			
@@ -85,7 +88,7 @@ public class CarrosController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteCarro(@PathVariable("id") long id) {
+	public ResponseEntity deleteCarro(@PathVariable("id") long id) {
 		
 		try{
 			carroService.deleteCarro(id);
