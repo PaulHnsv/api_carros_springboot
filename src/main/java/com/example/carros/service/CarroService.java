@@ -49,9 +49,9 @@ public List<CarroDTO> getCarrosByTipo(String tipo) {
 			.collect(Collectors.toList());
 }
 
-public Carro saveCarro(Carro carro) {
+public CarroDTO saveCarro(Carro carro) {
 	if(carro.getNome() != null && carro.getTipo() != null) {
-		return carroRepository.save(carro);
+		return CarroDTO.create(carroRepository.save(carro));
 	}else {
 		throw new RuntimeException("Não foi possível salvar seu registro.");
 	}

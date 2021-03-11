@@ -21,7 +21,11 @@ public class Carro {
 
 //@Column(nullable = false)
 @Getter @Setter private String nome;
-
 @Getter @Setter private String tipo;
+@Getter @Setter private String descricao;
+@Getter @Setter private String urlFoto;
+@Getter @Setter private String urlVideo;
+@Getter @Setter private String latitude;
+@Getter @Setter private String longitude;
 
 }

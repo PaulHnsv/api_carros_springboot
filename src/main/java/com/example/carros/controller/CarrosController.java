@@ -60,10 +60,10 @@ public class CarrosController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<String> postCarro(@RequestBody Carro carro) {
+	public ResponseEntity postCarro(@RequestBody Carro carro) {
 
 		try {
-			Carro c = carroService.saveCarro(carro);
+			CarroDTO c = carroService.saveCarro(carro);
 			return ResponseEntity.created(URI.create("api/v1/carros/" + c.getId())).build();
 		}
 		catch(Exception e){
