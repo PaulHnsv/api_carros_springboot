@@ -16,7 +16,7 @@ import com.example.carros.service.CarroService;
 import com.examples.carros.dto.CarroDTO;
 
 @SpringBootTest
-class CarrosApplicationTests {
+class CarroServiceTest {
 
 	@Autowired
 	private CarroService carroService;
@@ -44,8 +44,8 @@ class CarrosApplicationTests {
 		
 		//Update carro
 		Carro carroUpdate = new Carro();
-		carroUpdate.setNome("Fusca");
-		carroUpdate.setTipo("classicos");
+		carroUpdate.setNome("Gol Quadrado");
+		carroUpdate.setTipo("esportivos");
 		
 		CarroDTO c2 = carroService.updateCarro(carroUpdate, id);
 		assertEquals(carroUpdate.getNome(), c2.getNome());
