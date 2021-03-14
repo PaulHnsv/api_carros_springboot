@@ -1,6 +1,5 @@
 package com.example.carros;
 
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,63 +29,62 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CarrosApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public class CarrosAPITest {
-	
-	//injeção de dependências
+
+	// injeção de dependências
 	@Autowired
 	protected TestRestTemplate rest;
-	
+
 	@Autowired
 	private CarroService carroService;
-	
-	//metodos de test da api
-	private ResponseEntity<CarroDTO> getCarro (String url){
-		
-		//Crio uma nova requisicão usando um BasicAuth como header e lançando um get na url enviada
-		//como paramêtro, depois a resposta será convertida e armazenada em um responseEntity
+
+	// metodos de test da api
+	private ResponseEntity<CarroDTO> getCarro(String url) {
+
+		// Crio uma nova requisicão usando um BasicAuth como header e lançando um get na
+		// url enviada
+		// como paramêtro, depois a resposta será convertida e armazenada em um
+		// responseEntity
 		return rest.getForEntity(url, CarroDTO.class);
 	}
-	
-	private ResponseEntity<List<CarroDTO>> getListCarros (String url){
-		
-		//executa uma requisição http com o modelo fornecido dentro do metodo exchange, a resposta é retornada como um ResponseEntity.
-		//O ParameterizedTypeReference é usado para repassar informações de um tipo genérico
-		return rest.withBasicAuth("user", "123").exchange(
-						url,
-						HttpMethod.GET,
-						null,
-						new ParameterizedTypeReference<List<CarroDTO>>() {}
-						);
-		}
-	
-	
-	//Crud test APICarros
+
+	private ResponseEntity<List<CarroDTO>> getListCarros(String url) {
+
+		// executa uma requisição http com o modelo fornecido dentro do metodo exchange,
+		// a resposta é retornada como um ResponseEntity.
+		// O ParameterizedTypeReference é usado para repassar informações de um tipo
+		// genérico
+		return rest.withBasicAuth("user", "123").exchange(url, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<CarroDTO>>() {
+				});
+	}
+
+	// Crud test APICarros
 	@Test
 	public void crudTest() {
-		
-		//Create carro
+
+		// Create carro
 		Carro carro = new Carro();
 		carro.setNome("Fusca");
 		carro.setTipo("classicos");
-		
-		ResponseEntity response = rest.withBasicAuth("admin","123").
-										postForEntity("/api/v1/carros", carro, null);
+
+		ResponseEntity response = rest.withBasicAuth("admin", "123").postForEntity("/api/v1/carros", carro, null);
 		System.out.println(response);
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		
+
 		// Buscar o objeto
-        String location = "/" + response.getHeaders().get("location").get(0);
-        CarroDTO c = getCarro(location).getBody();
+		String location = "/" + response.getHeaders().get("location").get(0);
+		CarroDTO c = getCarro(location).getBody();
 
-        //verificar se o carro foi mesmo encontrado e comparar os campos de retorno
-        assertNotNull(c);
-        assertEquals("Fusca", c.getNome());
-        assertEquals("classicos", c.getTipo());
+		// verificar se o carro foi mesmo encontrado e comparar os campos de retorno
+		assertNotNull(c);
+		assertEquals("Fusca", c.getNome());
+		assertEquals("classicos", c.getTipo());
 
-        //Update carro
-      	Carro carroUpdate = new Carro();
-      	carro.setNome("Gol quadrado");
-      	carro.setTipo("classicos");
-      		
+//		// Update carro
+//		Carro carroUpdate = new Carro();
+//		carro.setNome("Gol quadrado");
+//		carro.setTipo("classicos");
+
 //      	ResponseEntity responseUpdate = rest.withBasicAuth("user", "123").exchange(
 //      			location,
 //				HttpMethod.PUT,
@@ -95,47 +93,51 @@ public class CarrosAPITest {
 //				);
 //      			
 //      	assertEquals(HttpStatus.OK, responseUpdate.getStatusCode());
-        
-        // Deletar o objeto
-        rest.withBasicAuth("user","123").delete(location);
 
-        // Verificar se deletou
-        assertEquals(HttpStatus.NOT_FOUND, getCarro(location).getStatusCode());
+		// Deletar o objeto
+		rest.withBasicAuth("user", "123").delete(location);
+
+		// Verificar se deletou
+		assertEquals(HttpStatus.NOT_FOUND, getCarro(location).getStatusCode());
 	}
-	
+
 	@Test
 	public void listPerType() {
-		
-		//primeiro lançamos alguns testes simples para saber se os tipos de carros no banco batem
-		//com os dados que passamos como esperados
+
+		// primeiro lançamos alguns testes simples para saber se os tipos de carros no
+		// banco batem
+		// com os dados que passamos como esperados
 		assertEquals(10, getListCarros("/api/v1/carros/tipo/classicos").getBody().size());
 		assertEquals(10, getListCarros("/api/v1/carros/tipo/esportivos").getBody().size());
 		assertEquals(10, getListCarros("/api/v1/carros/tipo/luxo").getBody().size());
-		
-		//test comparado o http status que passamos como esperado no primeiro parametro
-		//com o resultado  http status do metodo get que disparamos no segundo parametro
+
+		// test comparado o http status que passamos como esperado no primeiro parametro
+		// com o resultado http status do metodo get que disparamos no segundo parametro
 		assertEquals(HttpStatus.NO_CONTENT, getCarro("/api/v1/carros/tipo/luxuosos").getStatusCode());
 	}
-	
+
 	@Test
-    public void testGetOk() {
-		
-		//gravação do retorno apresentado no metodo de teste em uma variavel do tipo ResponseEntity,
-		//depois é comparado os retornos da requisição com o resultado que esperamos
-		 ResponseEntity<CarroDTO> response = getCarro("/api/v1/carros/11");
-		 assertEquals(HttpStatus.OK ,response.getStatusCode());
-		 
-		//gravação do retorno do body fornecido pela variavel response em uma variavel do tipo CarroDTO,
-		//depois é comparado o retorno de um dos campos com o resultado que esperamos
-		 CarroDTO carro = response.getBody();
-		 assertEquals("Ferrari FF", carro.getNome());
+	public void testGetOk() {
+
+		// gravação do retorno apresentado no metodo de teste em uma variavel do tipo
+		// ResponseEntity,
+		// depois é comparado os retornos da requisição com o resultado que esperamos
+		ResponseEntity<CarroDTO> response = getCarro("/api/v1/carros/11");
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+
+		// gravação do retorno do body fornecido pela variavel response em uma variavel
+		// do tipo CarroDTO,
+		// depois é comparado o retorno de um dos campos com o resultado que esperamos
+		CarroDTO carro = response.getBody();
+		assertEquals("Ferrari FF", carro.getNome());
 	}
-	
+
 	@Test
-    public void testGetNotFound() {
-		
-		//gravação do retorno apresentado no metodo de teste em uma variavel do tipo ResponseEntity,
-		//depois é comparado os retornos da requisição com o resultado que esperamos
+	public void testGetNotFound() {
+
+		// gravação do retorno apresentado no metodo de teste em uma variavel do tipo
+		// ResponseEntity,
+		// depois é comparado os retornos da requisição com o resultado que esperamos
 		ResponseEntity<CarroDTO> response = getCarro("/api/v1/carros/11100");
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 	}

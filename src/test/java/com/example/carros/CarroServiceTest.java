@@ -20,48 +20,48 @@ class CarroServiceTest {
 
 	@Autowired
 	private CarroService carroService;
-	
+
 	@Test
 	public void crudTest() {
-		
-		//Create carro
+
+		// Create carro
 		Carro carro = new Carro();
 		carro.setNome("Fusca");
 		carro.setTipo("classicos");
-		
+
 		CarroDTO c = carroService.saveCarro(carro);
-		
-		//Read carro
+
+		// Read carro
 		long id = c.getId();
 		assertNotNull(id);
-		
+
 		Optional<CarroDTO> getcarro = carroService.getCarrosById(id);
 		assertNotNull(getcarro.isPresent());
-		
+
 		c = getcarro.get();
 		assertEquals("Fusca", c.getNome());
 		assertEquals("classicos", c.getTipo());
-		
-		//Update carro
+
+		// Update carro
 		Carro carroUpdate = new Carro();
 		carroUpdate.setNome("Gol Quadrado");
 		carroUpdate.setTipo("esportivos");
-		
+
 		CarroDTO c2 = carroService.updateCarro(carroUpdate, id);
 		assertEquals(carroUpdate.getNome(), c2.getNome());
 		assertEquals(carroUpdate.getTipo(), c2.getTipo());
-		
-		//Delete carro
+
+		// Delete carro
 		carroService.deleteCarro(id);
 		assertFalse(carroService.getCarrosById(id).isPresent());
 	}
-	
+
 	@Test
 	public void testLista() {
 		List<CarroDTO> carros = carroService.getCarros();
 		assertEquals(30, carros.size());
 	}
-	
+
 	@Test
 	public void testListaPorTipo() {
 
@@ -70,6 +70,5 @@ class CarroServiceTest {
 		assertEquals(10, carroService.getCarrosByTipo("luxo").size());
 		assertEquals(0, carroService.getCarrosByTipo("populares").size());
 	}
-	
 
 }

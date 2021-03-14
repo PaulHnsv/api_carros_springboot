@@ -22,6 +22,10 @@ import com.example.carros.service.CarroService;
 import com.examples.carros.dto.CarroDTO;
 import com.google.gson.*;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping("/api/v1/carros")
 public class CarrosController {
@@ -30,7 +34,16 @@ public class CarrosController {
 	@Autowired
 	private CarroService carroService;
 	
-	@GetMapping
+
+	//customização de códigos de retorno para o swagger
+	@ApiOperation(value = "Retorna uma lista de carros")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Retorna a lista de carros"),
+		    @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+		    @ApiResponse(code = 404, message = "Lista de carros não encontrado"),
+		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
+		})
+	@GetMapping(produces="application/json")
 	public ResponseEntity getCarros() {
 		
 		return ResponseEntity.ok(carroService.getCarros());
@@ -38,7 +51,14 @@ public class CarrosController {
 		//return new ResponseEntity<>(carroService.getCarros(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna um carro específico")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Retorna o carro identificado"),
+		    @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+		    @ApiResponse(code = 404, message = "Carro não encontrado"),
+		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
+		})
+	@GetMapping(value = "/{id}", produces="application/json")
 	public ResponseEntity getCarrosById(@PathVariable("id") long id) {
 		Optional<CarroDTO> carro = carroService.getCarrosById(id);		
 		
@@ -49,7 +69,14 @@ public class CarrosController {
 		}
 	}
 	
-	@GetMapping("/tipo/{tipo}")
+	@ApiOperation(value = "Retorna uma lista de carros filtrando por seu tipo")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Retorna a lista de carros"),
+		    @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+		    @ApiResponse(code = 404, message = "Nenhum carro foi não encontrado"),
+		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
+		})
+	@GetMapping(value = "/tipo/{tipo}", produces="application/json")
 	public ResponseEntity getCarrosByTipo(@PathVariable("tipo") String tipo) {
 		List<CarroDTO> carro = carroService.getCarrosByTipo(tipo);
 		
@@ -59,7 +86,14 @@ public class CarrosController {
 				ResponseEntity.ok(carro);
 	}
 	
-	@PostMapping
+	@ApiOperation(value = "Cria um carro novo no banco de dados")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 201, message = "Carro criado com sucesso"),
+		    @ApiResponse(code = 400, message = "Não foi possível inserir o carro"),
+		    @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
+		})
+	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity postCarro(@RequestBody Carro carro) {
 
 		try {
@@ -71,7 +105,14 @@ public class CarrosController {
 		}
 	}
 	
-	@PutMapping("/{id}")
+	@ApiOperation(value = "Atualiza um determinado carro")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 200, message = "Carro atualizado com sucesso"),
+		    @ApiResponse(code = 400, message = "Não foi possível atualizar o carro"),
+		    @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
+		})
+	@PutMapping(value = "/{id}", produces="application/json", consumes="application/json")
 	public ResponseEntity<String> putCarro(@PathVariable("id") long id,@RequestBody Carro carro) {
 		
 		 Gson gson = new Gson();
@@ -87,12 +128,19 @@ public class CarrosController {
 			
 	}
 	
-	@DeleteMapping("/{id}")
+	@ApiOperation(value = "Deleta um determinado carro")
+	@ApiResponses(value = {
+		    @ApiResponse(code = 201, message = "Carro deletado com sucesso"),
+		    @ApiResponse(code = 400, message = "Não foi possível deletar o carro"),
+		    @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
+		})
+	@DeleteMapping(value = "/{id}", produces="application/json")
 	public ResponseEntity deleteCarro(@PathVariable("id") long id) {
 		
 		try{
 			carroService.deleteCarro(id);
-			return ResponseEntity.ok().body("Registro deletado com sucesso");
+			return ResponseEntity.ok().body("Carro deletado com sucesso");
 		}catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
