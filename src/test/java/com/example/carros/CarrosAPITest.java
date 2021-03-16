@@ -15,6 +15,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.example.carros.model.Carro;
 import com.example.carros.service.CarroService;
 import com.examples.carros.dto.CarroDTO;
+import com.google.gson.JsonObject;
+
+import springfox.documentation.spring.web.json.Json;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +60,16 @@ public class CarrosAPITest {
 				new ParameterizedTypeReference<List<CarroDTO>>() {
 				});
 	}
+	
+	private ResponseEntity putCarro(String url, Carro carro) {
+		 rest.put(url, carro);
+		 
+		 return new ResponseEntity(carro, HttpStatus.OK);
+	}
+	
+	private ResponseEntity<CarroDTO> postCarro(String url, Carro carro) {
+		return rest.withBasicAuth("admin", "123").postForEntity(url, carro, null);
+	}
 
 	// Crud test APICarros
 	@Test
@@ -67,7 +80,7 @@ public class CarrosAPITest {
 		carro.setNome("Fusca");
 		carro.setTipo("classicos");
 
-		ResponseEntity response = rest.withBasicAuth("admin", "123").postForEntity("/api/v1/carros", carro, null);
+		ResponseEntity response = postCarro("/api/v1/carros", carro);
 		System.out.println(response);
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
@@ -80,19 +93,13 @@ public class CarrosAPITest {
 		assertEquals("Fusca", c.getNome());
 		assertEquals("classicos", c.getTipo());
 
-//		// Update carro
-//		Carro carroUpdate = new Carro();
-//		carro.setNome("Gol quadrado");
-//		carro.setTipo("classicos");
-
-//      	ResponseEntity responseUpdate = rest.withBasicAuth("user", "123").exchange(
-//      			location,
-//				HttpMethod.PUT,
-//				null,
-//				new ParameterizedTypeReference<List<Carro>>() {}
-//				);
-//      			
-//      	assertEquals(HttpStatus.OK, responseUpdate.getStatusCode());
+		// Update carro
+		Carro carroUpdate = new Carro();
+		carro.setNome("Gol quadrado");
+		carro.setTipo("classicos");
+		
+		ResponseEntity responseUpdate = putCarro(location, carroUpdate);
+      	assertEquals(HttpStatus.OK, responseUpdate.getStatusCode());
 
 		// Deletar o objeto
 		rest.withBasicAuth("user", "123").delete(location);
