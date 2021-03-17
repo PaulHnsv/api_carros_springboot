@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.example.carros.dto.CarroDTO;
 import com.example.carros.model.Carro;
 import com.example.carros.service.CarroService;
-import com.examples.carros.dto.CarroDTO;
 
 @SpringBootTest
 class CarroServiceTest {

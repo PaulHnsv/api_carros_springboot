@@ -1,7 +1,6 @@
 package com.example.carros.service;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,9 +8,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.carros.dto.CarroDTO;
 import com.example.carros.model.Carro;
 import com.example.carros.repository.CarroRepository;
-import com.examples.carros.dto.CarroDTO;
+
 
 
 @Service
@@ -50,11 +50,9 @@ public List<CarroDTO> getCarrosByTipo(String tipo) {
 }
 
 public CarroDTO saveCarro(Carro carro) {
-	if(carro.getNome() != null && carro.getTipo() != null) {
+	org.springframework.util.Assert.isNull(carro.getId(), "Não foi possível inserir seu registro, o campo ID não pode ser enviado junto ao json");
 		return CarroDTO.create(carroRepository.save(carro));
-	}else {
-		throw new RuntimeException("Não foi possível salvar seu registro.");
-	}
+
 }
 
 public CarroDTO updateCarro(Carro carro, long id) {
@@ -81,11 +79,8 @@ public CarroDTO updateCarro(Carro carro, long id) {
 
 public void deleteCarro(long id) { 
 	
-	if(getCarrosById(id).isPresent()) {
-		carroRepository.deleteById(id);
-	}else {
-		throw new RuntimeException("Não foi possível deletar seu registro.");
-	}
+	carroRepository.deleteById(id);
+
 }
 
 

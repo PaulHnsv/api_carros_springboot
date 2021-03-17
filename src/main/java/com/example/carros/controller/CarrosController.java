@@ -1,12 +1,11 @@
 package com.example.carros.controller;
 
-import java.lang.reflect.UndeclaredThrowableException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,14 +16,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.carros.dto.CarroDTO;
 import com.example.carros.model.Carro;
 import com.example.carros.service.CarroService;
-import com.examples.carros.dto.CarroDTO;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import springfox.documentation.spring.web.json.Json;
 
 @RestController
 @RequestMapping("/api/v1/carros")
@@ -33,6 +34,7 @@ public class CarrosController {
 	//injeção de dependências
 	@Autowired
 	private CarroService carroService;
+	Gson gson = new Gson();
 	
 
 	//customização de códigos de retorno para o swagger
@@ -87,22 +89,15 @@ public class CarrosController {
 	}
 	
 	@ApiOperation(value = "Cria um carro novo no banco de dados")
-	@ApiResponses(value = {
-		    @ApiResponse(code = 201, message = "Carro criado com sucesso"),
-		    @ApiResponse(code = 400, message = "Não foi possível inserir o carro"),
-		    @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
-		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
-		})
-	@PostMapping(produces="application/json", consumes="application/json")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Carro criado com sucesso"),
+			@ApiResponse(code = 400, message = "Não foi possível inserir o carro"),
+			@ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+			@ApiResponse(code = 500, message = "Foi gerada uma exceção"), })
+	@PostMapping(produces = "application/json", consumes = "application/json")
 	public ResponseEntity postCarro(@RequestBody Carro carro) {
 
-		try {
-			CarroDTO c = carroService.saveCarro(carro);
-			return ResponseEntity.created(URI.create("api/v1/carros/" + c.getId())).build();
-		}
-		catch(Exception e){
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		CarroDTO c = carroService.saveCarro(carro);
+		return ResponseEntity.created(URI.create("api/v1/carros/" + c.getId())).build();
 	}
 	
 	@ApiOperation(value = "Atualiza um determinado carro")
@@ -115,8 +110,6 @@ public class CarrosController {
 	@PutMapping(value = "/{id}", produces="application/json", consumes="application/json")
 	public ResponseEntity<String> putCarro(@PathVariable("id") long id,@RequestBody Carro carro) {
 		
-		 Gson gson = new Gson();
-		 
 		try{
 			CarroDTO c = carroService.updateCarro(carro, id);
 			String jsonInString = gson.toJson(c);
@@ -136,14 +129,10 @@ public class CarrosController {
 		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
 		})
 	@DeleteMapping(value = "/{id}", produces="application/json")
-	public ResponseEntity deleteCarro(@PathVariable("id") long id) {
+	public ResponseEntity<String> deleteCarro(@PathVariable("id") long id) {
 		
-		try{
 			carroService.deleteCarro(id);
-			return ResponseEntity.ok().body("Carro deletado com sucesso");
-		}catch (Exception e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+			return ResponseEntity.ok().body(gson.toJson("Carro deletado com sucesso."));
 		
 	}
 }

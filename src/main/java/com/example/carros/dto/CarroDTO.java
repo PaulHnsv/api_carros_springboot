@@ -1,4 +1,4 @@
-package com.examples.carros.dto;
+package com.example.carros.dto;
 
 import org.modelmapper.ModelMapper;
 

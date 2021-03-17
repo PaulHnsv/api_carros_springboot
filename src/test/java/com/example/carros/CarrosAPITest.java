@@ -1,5 +1,10 @@
 package com.example.carros;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,22 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.example.carros.dto.CarroDTO;
 import com.example.carros.model.Carro;
 import com.example.carros.service.CarroService;
-import com.examples.carros.dto.CarroDTO;
-import com.google.gson.JsonObject;
-
-import springfox.documentation.spring.web.json.Json;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CarrosApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
