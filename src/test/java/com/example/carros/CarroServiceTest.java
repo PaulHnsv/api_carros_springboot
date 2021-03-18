@@ -1,5 +1,7 @@
 package com.example.carros;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.carros.dto.CarroDTO;
+import com.example.carros.exception.ObjectNotFoundException;
 import com.example.carros.model.Carro;
 import com.example.carros.service.CarroService;
 
@@ -30,15 +33,15 @@ class CarroServiceTest {
 		carro.setTipo("classicos");
 
 		CarroDTO c = carroService.saveCarro(carro);
+		assertNotNull(c);
 
 		// Read carro
 		long id = c.getId();
 		assertNotNull(id);
 
-		Optional<CarroDTO> getcarro = carroService.getCarrosById(id);
-		assertNotNull(getcarro.isPresent());
-
-		c = getcarro.get();
+		c = carroService.getCarrosById(id);
+		
+		assertNotNull(c);
 		assertEquals("Fusca", c.getNome());
 		assertEquals("classicos", c.getTipo());
 
@@ -53,7 +56,12 @@ class CarroServiceTest {
 
 		// Delete carro
 		carroService.deleteCarro(id);
-		assertFalse(carroService.getCarrosById(id).isPresent());
+		try {
+		assertNull(carroService.getCarrosById(id));
+		fail("O carro não foi excluído");
+		}catch(ObjectNotFoundException ex) {
+			System.out.println("O carro foi deletado sucesso");
+		}
 	}
 
 	@Test

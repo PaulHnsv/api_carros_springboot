@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.carros.dto.CarroDTO;
+import com.example.carros.exception.ObjectNotFoundException;
 import com.example.carros.model.Carro;
 import com.example.carros.repository.CarroRepository;
 
@@ -35,18 +36,18 @@ public List<CarroDTO> getCarros(){
 	
 }
 
-public Optional<CarroDTO> getCarrosById(long id){
+public CarroDTO getCarrosById(long id){
+	Optional<Carro> carro = carroRepository.findById(id);
 	
 	//lambda
-	return carroRepository.findById(id).map(CarroDTO::create);
+	return carro.map(CarroDTO::create).orElseThrow(() -> new ObjectNotFoundException("Carro não encontrado")) ;
 }
 
 public List<CarroDTO> getCarrosByTipo(String tipo) {
 	
-	return carroRepository.findByTipo(tipo)
-			.stream()
-			.map(CarroDTO::create)
-			.collect(Collectors.toList());
+	List<Carro> carros = carroRepository.findByTipo(tipo);
+	
+	return carros.stream().map(CarroDTO::create).collect(Collectors.toList());
 }
 
 public CarroDTO saveCarro(Carro carro) {

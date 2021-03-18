@@ -61,28 +61,23 @@ public class CarrosController {
 		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
 		})
 	@GetMapping(value = "/{id}", produces="application/json")
-	public ResponseEntity getCarrosById(@PathVariable("id") long id) {
-		Optional<CarroDTO> carro = carroService.getCarrosById(id);		
-		
-		if(carro.isPresent()) {
-			return ResponseEntity.ok(carro);
-		}else {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity getCarroById(@PathVariable("id") long id) {
+		CarroDTO carro = carroService.getCarrosById(id);		
+		return ResponseEntity.ok(carro);
 	}
 	
 	@ApiOperation(value = "Retorna uma lista de carros filtrando por seu tipo")
 	@ApiResponses(value = {
 		    @ApiResponse(code = 200, message = "Retorna a lista de carros"),
+		    @ApiResponse(code = 204, message = "A lista de carros está vazia"),
 		    @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
-		    @ApiResponse(code = 404, message = "Nenhum carro foi não encontrado"),
 		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
 		})
 	@GetMapping(value = "/tipo/{tipo}", produces="application/json")
 	public ResponseEntity getCarrosByTipo(@PathVariable("tipo") String tipo) {
 		List<CarroDTO> carro = carroService.getCarrosByTipo(tipo);
 		
-		//if ternário do java
+//		//if ternário do java
 		return carro.isEmpty() ?
 				ResponseEntity.noContent().build() :
 				ResponseEntity.ok(carro);
