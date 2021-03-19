@@ -7,6 +7,7 @@ import java.util.Optional;
 //import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,6 +47,7 @@ public class CarrosController {
 		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
 		})
 	@GetMapping(produces="application/json")
+	@Secured("ROLE_USER")
 	public ResponseEntity getCarros() {
 		
 		return ResponseEntity.ok(carroService.getCarros());
@@ -61,6 +63,7 @@ public class CarrosController {
 		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
 		})
 	@GetMapping(value = "/{id}", produces="application/json")
+	@Secured("ROLE_USER")
 	public ResponseEntity getCarroById(@PathVariable("id") long id) {
 		CarroDTO carro = carroService.getCarrosById(id);		
 		return ResponseEntity.ok(carro);
@@ -74,13 +77,14 @@ public class CarrosController {
 		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
 		})
 	@GetMapping(value = "/tipo/{tipo}", produces="application/json")
+	@Secured("ROLE_USER")
 	public ResponseEntity getCarrosByTipo(@PathVariable("tipo") String tipo) {
 		List<CarroDTO> carro = carroService.getCarrosByTipo(tipo);
 		
 //		//if ternário do java
-		return carro.isEmpty() ?
-				ResponseEntity.noContent().build() :
-				ResponseEntity.ok(carro);
+//		return carro.isEmpty() ?
+//				ResponseEntity.noContent().build() :
+				return ResponseEntity.ok(carro);
 	}
 	
 	@ApiOperation(value = "Cria um carro novo no banco de dados")
@@ -89,6 +93,7 @@ public class CarrosController {
 			@ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
 			@ApiResponse(code = 500, message = "Foi gerada uma exceção"), })
 	@PostMapping(produces = "application/json", consumes = "application/json")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity postCarro(@RequestBody Carro carro) {
 
 		CarroDTO c = carroService.saveCarro(carro);
@@ -103,6 +108,7 @@ public class CarrosController {
 		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
 		})
 	@PutMapping(value = "/{id}", produces="application/json", consumes="application/json")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<String> putCarro(@PathVariable("id") long id,@RequestBody Carro carro) {
 		
 		try{
@@ -124,6 +130,7 @@ public class CarrosController {
 		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
 		})
 	@DeleteMapping(value = "/{id}", produces="application/json")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<String> deleteCarro(@PathVariable("id") long id) {
 		
 			carroService.deleteCarro(id);

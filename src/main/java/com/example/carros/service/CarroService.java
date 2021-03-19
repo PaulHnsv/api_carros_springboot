@@ -47,6 +47,8 @@ public List<CarroDTO> getCarrosByTipo(String tipo) {
 	
 	List<Carro> carros = carroRepository.findByTipo(tipo);
 	
+	org.springframework.util.Assert.notEmpty(carros, "Nenhum carro encontrado, a lista está vazia");
+	
 	return carros.stream().map(CarroDTO::create).collect(Collectors.toList());
 }
 
@@ -58,24 +60,21 @@ public CarroDTO saveCarro(Carro carro) {
 
 public CarroDTO updateCarro(Carro carro, long id) {
 	
-	org.springframework.util.Assert.notNull(id, "não foi possível atualizar seu registro");
+	org.springframework.util.Assert.notNull(id, "não foi possível atualizar seu registro, o parâmetro id do carro enviado está nulo");
+	org.springframework.util.Assert.notNull(carro.getNome(),"não foi possível atualizar seu registro, o campo nome do carro enviado está nulo");
+	org.springframework.util.Assert.notNull(carro.getTipo(), "não foi possível atualizar seu registro, o campo tipo do carro enviado está nulo");
 	
 	//Busca o carro no banco de dados
 	Optional<Carro> carroAntigo = carroRepository.findById(id);
-	if(carroAntigo.isPresent() && carro.getNome() != null && carro.getTipo() != null) {
-		
-		//atualiza os dados conforme passado nos parametros.
-		Carro carroNovo = carroAntigo.get();
-		carroNovo.setNome(carro.getNome());
-		carroNovo.setTipo(carro.getTipo());
-		
+
+	// atualiza os dados conforme passado nos parametros.
+	Carro carroNovo = carroAntigo.get();
+	carroNovo.setNome(carro.getNome());
+	carroNovo.setTipo(carro.getTipo());
 	carroRepository.save(carroNovo);
 	
 	return CarroDTO.create(carroNovo);
-	}
-	else {
-		throw new RuntimeException("Não foi possível atualizar seu registro.");
-	}
+
 }
 
 public void deleteCarro(long id) { 
