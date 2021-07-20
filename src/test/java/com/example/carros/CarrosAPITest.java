@@ -39,7 +39,7 @@ public class CarrosAPITest {
 		// url enviada
 		// como paramêtro, depois a resposta será convertida e armazenada em um
 		// responseEntity
-		return rest.getForEntity(url, CarroDTO.class);
+		return rest.withBasicAuth("root", "123").getForEntity(url, CarroDTO.class);
 	}
 
 	private ResponseEntity<List<CarroDTO>> getListCarros(String url) {
@@ -48,19 +48,19 @@ public class CarrosAPITest {
 		// a resposta é retornada como um ResponseEntity.
 		// O ParameterizedTypeReference é usado para repassar informações de um tipo
 		// genérico
-		return rest.withBasicAuth("user", "123").exchange(url, HttpMethod.GET, null,
+		return rest.withBasicAuth("root", "123").exchange(url, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<CarroDTO>>() {
 				});
 	}
 	
 	private ResponseEntity putCarro(String url, Carro carro) {
-		 rest.put(url, carro);
+		 rest.withBasicAuth("root", "123").put(url, carro);
 		 
 		 return new ResponseEntity(carro, HttpStatus.OK);
 	}
 	
 	private ResponseEntity<CarroDTO> postCarro(String url, Carro carro) {
-		return rest.withBasicAuth("admin", "123").postForEntity(url, carro, null);
+		return rest.withBasicAuth("root", "123").postForEntity(url, carro, null);
 	}
 
 	// Crud test APICarros
@@ -94,7 +94,7 @@ public class CarrosAPITest {
       	assertEquals(HttpStatus.OK, responseUpdate.getStatusCode());
 
 		// Deletar o objeto
-		rest.withBasicAuth("user", "123").delete(location);
+		rest.withBasicAuth("root", "123").delete(location);
 
 		// Verificar se deletou
 		assertEquals(HttpStatus.NOT_FOUND, getCarro(location).getStatusCode());
@@ -112,7 +112,7 @@ public class CarrosAPITest {
 
 		// test comparado o http status que passamos como esperado no primeiro parametro
 		// com o resultado http status do metodo get que disparamos no segundo parametro
-		assertEquals(HttpStatus.NO_CONTENT, getCarro("/api/v1/carros/tipo/luxuosos").getStatusCode());
+		assertEquals(HttpStatus.BAD_REQUEST , getCarro("/api/v1/carros/tipo/xxx").getStatusCode());
 	}
 
 	@Test

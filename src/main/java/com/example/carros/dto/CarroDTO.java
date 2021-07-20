@@ -12,6 +12,11 @@ public class CarroDTO {
 	private Long id;
 	private String nome;
 	private String tipo;
+//	private String descricao;
+//	private String urlFoto;
+//	private String urlVideo;
+//	private String latitude;
+//	private String longitude;
 
 //	public CarroDTO(Carro c) {
 //		this.id = c.getId();
@@ -23,4 +28,6 @@ public class CarroDTO {
 		ModelMapper modelMapper = new ModelMapper();
 		return modelMapper.map(c, CarroDTO.class);
 	}
+
+
 }

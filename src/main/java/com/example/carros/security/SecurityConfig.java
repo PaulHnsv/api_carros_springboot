@@ -37,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
+    	//a senha ficará em hashcode
     	//encriptador de senhas, obrigatório
     	BCryptPasswordEncoder enconder = new BCryptPasswordEncoder();
     	

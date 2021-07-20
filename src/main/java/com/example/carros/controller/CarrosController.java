@@ -47,7 +47,7 @@ public class CarrosController {
 		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
 		})
 	@GetMapping(produces="application/json")
-	@Secured("ROLE_USER")
+	@Secured({ "ROLE_USER", "ROLE_ADMIN" })
 	public ResponseEntity getCarros() {
 		
 		return ResponseEntity.ok(carroService.getCarros());
@@ -63,7 +63,7 @@ public class CarrosController {
 		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
 		})
 	@GetMapping(value = "/{id}", produces="application/json")
-	@Secured("ROLE_USER")
+	@Secured({ "ROLE_USER", "ROLE_ADMIN" })
 	public ResponseEntity getCarroById(@PathVariable("id") long id) {
 		CarroDTO carro = carroService.getCarrosById(id);		
 		return ResponseEntity.ok(carro);
@@ -77,7 +77,7 @@ public class CarrosController {
 		    @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
 		})
 	@GetMapping(value = "/tipo/{tipo}", produces="application/json")
-	@Secured("ROLE_USER")
+	@Secured({ "ROLE_USER", "ROLE_ADMIN" })
 	public ResponseEntity getCarrosByTipo(@PathVariable("tipo") String tipo) {
 		List<CarroDTO> carro = carroService.getCarrosByTipo(tipo);
 		

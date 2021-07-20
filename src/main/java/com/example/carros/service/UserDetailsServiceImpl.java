@@ -1,7 +1,6 @@
 package com.example.carros.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,7 +25,17 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     		throw new UsernameNotFoundException("User not found");
     	}
     	
-    	return User.withUsername(username).password(user.getSenha()).roles("ADMIN", "USER").build();
+    	//serve para atribuir uma role automaticamente ao se conectar com determinado usuário
+    	//return User.withUsername(username).password(user.getSenha()).roles("ADMIN", "USER").build();
+    	
+    	return user;
 	}
+	
+	//exemplo de como representar determinada hash de uma senha
+//	public static void main(String[] args) {
+//		BCryptPasswordEncoder enconder = new BCryptPasswordEncoder();
+//		System.out.println(enconder.encode("123"));
+//		
+//	}
 
 }
