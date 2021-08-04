@@ -22,6 +22,9 @@ import lombok.Data;
 @Data
 public class User implements UserDetails{
 
+
+	private static final long serialVersionUID = 1L;
+
 	@ApiModelProperty(required = true) //referência para o swagger
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) //anotations para o hibernate
 	private Long id;

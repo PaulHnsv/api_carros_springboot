@@ -21,7 +21,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
 	Gson gson = new Gson();
 
 	@ExceptionHandler(EmptyResultDataAccessException.class)
-	private ResponseEntity emptyResultDataAccessException(Exception ex) {
+	private ResponseEntity<?> emptyResultDataAccessException(Exception ex) {
 		return ResponseEntity.noContent().build();
 	}
 	

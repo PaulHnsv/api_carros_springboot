@@ -44,10 +44,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	//implementação do nosso service responsável por criar os usuários
     	auth.userDetailsService(userDetailsService).passwordEncoder(enconder);
     	
-//        auth
-//   	  	.inMemoryAuthentication().passwordEncoder(enconder)
-//   	  	.withUser("root").password(enconder.encode("root")).roles("ADMIN", "USER")
-//   	  	.and()
-//   	  	.withUser("user").password(enconder.encode("user")).roles("USER");
     }
 }
