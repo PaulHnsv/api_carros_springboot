@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.carros.dto.CarroDTO;
 import com.example.carros.exception.ObjectNotFoundException;
 import com.example.carros.model.Carro;
-import com.example.carros.service.CarroService;
+import com.example.carros.model.dto.CarroDTO;
+import com.example.carros.service.carroService.CarroService;
 
 @SpringBootTest
 class CarroServiceTest {

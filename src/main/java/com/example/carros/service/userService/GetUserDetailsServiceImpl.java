@@ -1,4 +1,4 @@
-package com.example.carros.service;
+package com.example.carros.service.userService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.carros.repository.UserRepository;
 
 @Service("userDetailsService")
-public class UserDetailsServiceImpl implements UserDetailsService{
+public class GetUserDetailsServiceImpl implements UserDetailsService{
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -30,12 +30,5 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     	
     	return user;
 	}
-	
-	//exemplo de como representar determinada hash de uma senha
-//	public static void main(String[] args) {
-//		BCryptPasswordEncoder enconder = new BCryptPasswordEncoder();
-//		System.out.println(enconder.encode("123"));
-//		
-//	}
 
 }

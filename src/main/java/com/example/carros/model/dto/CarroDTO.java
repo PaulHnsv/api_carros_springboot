@@ -1,4 +1,4 @@
-package com.example.carros.dto;
+package com.example.carros.model.dto;
 
 import org.modelmapper.ModelMapper;
 
@@ -24,9 +24,9 @@ public class CarroDTO {
 //		this.tipo = c.getTipo();
 //	}
 
-	public static CarroDTO create(Carro c) {
+	public static CarroDTO create(Carro carro) {
 		ModelMapper modelMapper = new ModelMapper();
-		return modelMapper.map(c, CarroDTO.class);
+		return modelMapper.map(carro, CarroDTO.class);
 	}
 
 
